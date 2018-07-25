@@ -3,10 +3,152 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:PuzzleHunt2018.Views"
         xmlns:local="clr-namespace:PuzzleHunt2018"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Lock"
+        Height="500"
+        Width="1000"
+        MinHeight="500"
+        MinWidth="1000">
+    <Window.Resources>
         
+        <ImageBrush x:Key="background" ImageSource="/PuzzleHunt2018;component/background.jpg" Opacity="1" Stretch="UniformToFill"/>
+
+        <Storyboard x:Name="LockAnimateUnlock" x:Key="LockAnimateUnlock">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,0" />
+                <SplineThicknessKeyFrame KeyTime="00:00:02" Value="0,0,0,70" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style x:Key="CommandButtonStyle" TargetType="Button">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="0,1"
+                                         MappingMode="RelativeToBoundingBox">
+                        <GradientStop Color="#1D9DD3" Offset="0"/>
+                        <GradientStop Color="#167BA7" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </Window.Resources>
+    <Grid x:Name="Root"
+          Background="{StaticResource background}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0"
+              Background="#44000000">
+            <TextBlock Text="Lock State"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       Foreground="#CCCCCC"
+                       Margin="0,100"/>
+            <Image x:Name="LockPin"
+                   Source="/PuzzleHunt2018;component/lock_pin.png"
+                   Width="100"
+                   HorizontalAlignment="Center"
+                   Margin="0"/>
+            <Image x:Name="LockBody"
+                   Source="/PuzzleHunt2018;component/lock_body.png"
+                   Width="100"
+                   HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <views:CodeEntryView Grid.Row="0"
+                                 Margin="50"
+                                 DataContext="{Binding WorkingCodeEntry}"/>
+
+            <Grid Grid.Row="1"
+                  Margin="50"
+                  MaxHeight="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="Reset"
+                        Grid.Column="0"
+                        Style="{StaticResource CommandButtonStyle}"
+                        HorizontalAlignment="Left"
+                        Width="100"
+                        Command="{Binding ResetCommand}">
+                    <Image Source="/PuzzleHunt2018;component/reset.png" Stretch="None"/>
+                </Button>
+                <Button x:Name="EnterInactiveBit"
+                        Grid.Column="1"
+                        Style="{StaticResource CommandButtonStyle}"
+                        Command="{Binding EnterInactiveBitCommand}">
+                    <Ellipse StrokeThickness="2"
+                             Stroke="Black"
+                             Stretch="Uniform"
+                             Height="30"
+                             Width="30"/>
+                </Button>
+                <Button x:Name="EnterActiveBit"
+                        Grid.Column="3"
+                        Style="{StaticResource CommandButtonStyle}"
+                        Command="{Binding EnterActiveBitCommand}">
+                    <Ellipse StrokeThickness="8"
+                             Stroke="Red"
+                             Stretch="Uniform"
+                             Height="30"
+                             Width="30"/>
+                </Button>
+                <Button x:Name="SubmitCode"
+                        Grid.Column="4"
+                        Style="{StaticResource CommandButtonStyle}"
+                        HorizontalAlignment="Right"
+                        Width="100"
+                        Command="{Binding SubmitCommand}">
+                    <Image Source="/PuzzleHunt2018;component/submit.png" Stretch="None"/>
+                </Button>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="2"
+              Background="#44000000">
+            <TextBlock Text="Codes Entered"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       Foreground="#CCCCCC"
+                       Margin="0,100"/>
+            <ItemsControl x:Name="EnteredCodeItems"
+                          HorizontalAlignment="Center"
+                          Margin="0,140,0,10"
+                          Width="180"
+                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                          ItemsSource="{Binding EnteredCodes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:CodeEntryView Margin="10,0,0,8"
+                                             Height="25"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </Window>
