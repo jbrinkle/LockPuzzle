@@ -21,6 +21,12 @@
                 <SplineThicknessKeyFrame KeyTime="00:00:02" Value="0,0,0,70" />
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
+        <Storyboard x:Name="LockAnimateLock" x:Key="LockAnimateLock">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,70" />
+                <SplineThicknessKeyFrame KeyTime="00:00:02" Value="0,0,0,0" />
+            </ThicknessAnimationUsingKeyFrames>
+        </Storyboard>
 
         <Style x:Key="CommandButtonStyle" TargetType="Button">
             <Setter Property="BorderBrush" Value="Black"/>
@@ -60,7 +66,22 @@
                    Source="/PuzzleHunt2018;component/lock_pin.png"
                    Width="100"
                    HorizontalAlignment="Center"
-                   Margin="0"/>
+                   Margin="0">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsUnlocked}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource LockAnimateUnlock}"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource LockAnimateLock}"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
             <Image x:Name="LockBody"
                    Source="/PuzzleHunt2018;component/lock_body.png"
                    Width="100"

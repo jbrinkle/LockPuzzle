@@ -83,5 +83,22 @@ namespace PuzzleHunt2018.ViewModels
 
             return copy;
         }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as CodeEntryViewModel;
+
+            if (other == null) return false;
+
+            return IsBit1Active == other.IsBit1Active &&
+                   IsBit2Active == other.IsBit2Active &&
+                   IsBit3Active == other.IsBit3Active &&
+                   IsBit4Active == other.IsBit4Active;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
